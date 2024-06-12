@@ -1,7 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 
-function Picture({ id, url, visible}) {
+function Picture({ id, url}) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "image",
     item: { id: id },
