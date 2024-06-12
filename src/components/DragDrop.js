@@ -36,40 +36,67 @@ const initialPictureList = [
   { id: 15, url: Image15 },
 ];
 
-function useDropTarget(pictureList, setPictureList) {
-  const [board, setBoard] = useState([]);
-
+function useDropTarget(boardName, boards, setBoards, setPictureList) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "image",
-    drop: (item) => addImageToBoard(item.id),
+    drop: (item) => moveImageToBoard(item.id, boardName),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
 
-  const addImageToBoard = (id) => {
-    const picture = pictureList.find((picture) => picture.id === id);
-    if (picture) {
-      setBoard((prevBoard) => {
-        console.log(prevBoard);
-        if (!prevBoard.some((boardPicture) => boardPicture.id === id)) {
-          setPictureList((prevList) =>
-            prevList.map((p) =>
-              p.id === id ? { ...p, visible: false } : p
-            )
-          );
-          return [...prevBoard, picture];
-        }
-        return prevBoard;
-      });
-    }
+  const moveImageToBoard = (id, targetBoardName) => {
+    setBoards((prevBoards) => {
+      const updatedBoards = { ...prevBoards };
+      // Remove picture from all boards
+      for (const board in updatedBoards) {
+        updatedBoards[board] = updatedBoards[board].filter(
+          (picture) => picture.id !== id
+        );
+      }
+      // Add picture to the target board
+      const picture = initialPictureList.find((picture) => picture.id === id);
+      if (picture) {
+        updatedBoards[targetBoardName] = [
+          ...updatedBoards[targetBoardName],
+          picture,
+        ];
+      }
+      return updatedBoards;
+    });
+
+    // Update picture visibility
+    setPictureList((prevList) =>
+      prevList.map((p) =>
+        p.id === id ? { ...p, visible: false } : p
+      )
+    );
   };
 
-  return { board, drop };
+  return { isOver, drop };
 }
 
 function DragDrop() {
   const [pictureList, setPictureList] = useState(initialPictureList.map(picture => ({ ...picture, visible: true })));
+  const [boards, setBoards] = useState({
+    board1: [],
+    board2: [],
+    board3: [],
+    board4: [],
+    board5: [],
+  });
+
+  // Effect to update picture visibility when boards change
+  useEffect(() => {
+    setPictureList((prevList) =>
+      prevList.map((picture) => ({
+        ...picture,
+        visible: !Object.values(boards).some(board =>
+          board.some(boardPicture => boardPicture.id === picture.id)
+        ),
+      }))
+    );
+  }, [boards]);
 
   return (
     <>
@@ -79,21 +106,25 @@ function DragDrop() {
         ))}
       </div>
       <div style={{ display: "flex" }}>
-        <Board key={'board1'} boardName={'board1'} pictureList={pictureList} setPictureList={setPictureList} />
-        <Board key={'board2'} boardName={'board2'} pictureList={pictureList} setPictureList={setPictureList} />
-        <Board key={'board3'} boardName={'board3'} pictureList={pictureList} setPictureList={setPictureList} />
-        <Board key={'board4'} boardName={'board4'} pictureList={pictureList} setPictureList={setPictureList} />
-        <Board key={'board5'} boardName={'board5'} pictureList={pictureList} setPictureList={setPictureList} />
+        {Object.keys(boards).map((boardName) => (
+          <Board
+            key={boardName}
+            boardName={boardName}
+            boards={boards}
+            setBoards={setBoards}
+            setPictureList={setPictureList}
+          />
+        ))}
       </div>
     </>
   );
 }
 
-function Board({ boardName, pictureList, setPictureList }) {
-  const { board, drop } = useDropTarget(pictureList, setPictureList);
+function Board({ boardName, boards, setBoards, setPictureList }) {
+  const { isOver, drop } = useDropTarget(boardName, boards, setBoards, setPictureList);
   return (
-    <div className="Board" ref={drop}>
-      {board.map((picture) => (
+    <div className={`Board ${isOver ? "highlight" : ""}`} ref={drop}>
+      {boards[boardName].map((picture) => (
         <Picture key={picture.id} url={picture.url} id={picture.id} />
       ))}
     </div>
