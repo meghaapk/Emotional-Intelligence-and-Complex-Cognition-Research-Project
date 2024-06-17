@@ -29,7 +29,7 @@ function Picture({ id, url }) {
         src={url}
         className={`picture ${isDragging ? "dragging" : ""}`}
         width="150px"
-        onMouseEnter={handleMouseEnter}
+        onClick={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       />
       <Modal show={showModal} onClose={handleMouseLeave} url={url} />
