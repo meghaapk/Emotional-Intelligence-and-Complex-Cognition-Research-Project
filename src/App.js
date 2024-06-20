@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DragDrop from "./components/DragDrop";
@@ -16,8 +18,6 @@ import Image12 from "./Images/Img12.png";
 import Image13 from "./Images/Img13.png";
 import Image14 from "./Images/Img14.png";
 import Image15 from "./Images/Img15.png";
-import { useEffect, useState } from "react";
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
 // Initial list of pictures with their IDs and URLs
 const phase1list = [
@@ -37,6 +37,7 @@ const phase1list = [
   { id: 14, url: Image14 },
   { id: 15, url: Image15 },
 ];
+
 const phase2list = [
   { id: 1, url: Image1 },
   { id: 2, url: Image2 },
@@ -57,21 +58,73 @@ const phase3list = [
   { id: 14, url: Image14 },
   { id: 15, url: Image15 },
 ];
+
 function App() {
   const [phase1score, setPhase1Score] = useState(0);
   const [phase2score, setPhase2Score] = useState(0);
   const [phase3score, setPhase3Score] = useState(0);
+
   useEffect(() => {
-    console.log(phase1score);
+    console.log('Phase 1 Score:', phase1score);
   }, [phase1score]);
+
+  useEffect(() => {
+    console.log('Phase 1 Score:', phase1score);
+    console.log('Phase 2 Score:', phase2score);
+  }, [phase2score]);
+
+  useEffect(() => {
+    console.log('Phase 1 Score:', phase1score);
+    console.log('Phase 2 Score:', phase2score);
+    console.log('Phase 3 Score:', phase3score);
+  }, [phase3score]);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="App">
         <BrowserRouter>
           <Routes>
-            <Route exact path='/' element={<DragDrop phase="1" initialPictureList={phase1list} setPhaseScore={setPhase1Score}/>} />
-            <Route exact path='/phase2' element={<DragDrop phase="1" initialPictureList={phase2list} setPhaseScore={setPhase2Score}/>} />
-            <Route exact path='/phase3' element={<DragDrop phase="1" initialPictureList={phase3list} setPhaseScore={setPhase3Score}/>} />
+            <Route
+              path="/"
+              element={
+                <DragDrop
+                  phase="1"
+                  initialPictureList={phase1list}
+                  setPhaseScore={setPhase1Score}
+                />
+              }
+            />
+            <Route
+              path="/phase2"
+              element={
+                <DragDrop
+                  phase="2"
+                  initialPictureList={phase2list}
+                  setPhaseScore={setPhase2Score}
+                />
+              }
+            />
+            <Route
+              path="/phase3"
+              element={
+                <DragDrop
+                  phase="3"
+                  initialPictureList={phase3list}
+                  setPhaseScore={setPhase3Score}
+                />
+              }
+            />
+            <Route
+              path="/result"
+              element={
+                <div>
+                  <h1>Results</h1>
+                  <p>Phase 1 Score: {phase1score}</p>
+                  <p>Phase 2 Score: {phase2score}</p>
+                  <p>Phase 3 Score: {phase3score}</p>
+                </div>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </div>

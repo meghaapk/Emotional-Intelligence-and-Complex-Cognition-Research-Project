@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Picture from "./Picture"; // Component to display individual pictures
-import { useDrop } from "react-dnd"; // Hook for drag-and-drop functionality
-import "../App.css"; // Importing styles
+import Picture from "./Picture";
+import { useDrop } from "react-dnd";
+import "../App.css";
 import { useNavigate } from "react-router-dom";
 
 // Custom hook for creating drop targets
@@ -70,12 +70,14 @@ function useDropTarget(boardName, boards, setBoards, setPictureList, setScore, i
   return { isOver, drop };
 }
 
-function DragDrop({initialPictureList, setPhaseScore}) {
-  // State to manage the list of pictures, including their visibility
-  const [pictureList, setPictureList] = useState(initialPictureList.map(picture => ({ ...picture, visible: true })));
+function DragDrop({ initialPictureList, setPhaseScore, phase }) {
+  const [pictureList, setPictureList] = useState([]);
   const [showDone, setShowDone] = useState(false);
   const navigate = useNavigate();
   
+  
+  // State to manage the pictures in each board
+
   // State to manage the pictures in each board
   const [boards, setBoards] = useState({
     board1: [],
@@ -85,7 +87,6 @@ function DragDrop({initialPictureList, setPhaseScore}) {
     board5: [],
   });
 
-  // State to manage the score for each board
   const [score, setScore] = useState({
     board1: 0,
     board2: 0,
@@ -94,33 +95,41 @@ function DragDrop({initialPictureList, setPhaseScore}) {
     board5: 0,
   });
 
+  useEffect(() => {
+    setPictureList(initialPictureList.map(picture => ({ ...picture, visible: true })));
+    setBoards({
+      board1: [],
+      board2: [],
+      board3: [],
+      board4: [],
+      board5: [],
+    });
+    setScore({
+      board1: 0,
+      board2: 0,
+      board3: 0,
+      board4: 0,
+      board5: 0,
+    });
+    setShowDone(false);
+  }, [initialPictureList, phase]);
+
   const onDone = () => {
     const avgScore = Object.values(score).reduce((acc, curr) => acc + curr, 0) / initialPictureList.length;
     setPhaseScore(avgScore);
-    navigate('/phase2');
-  }
+    if(phase >= "3")  navigate(`/result`);
+    else navigate(`/phase${parseInt(phase) + 1}`);
+  };
 
-  // check if sum of lenght of all boards is equal to the length of the initial picture list
   useEffect(() => {
     if (Object.values(boards).flat().length === initialPictureList.length) {
       setShowDone(true);
     }
-  }, [boards]);
-
-  // Effect to update picture visibility when the boards change
-  useEffect(() => {
-    setPictureList((prevList) =>
-      prevList.map((picture) => ({
-        ...picture,
-        visible: !Object.values(boards).some(board =>
-          board.some(boardPicture => boardPicture.id === picture.id)
-        ),
-      }))
-    );
-  }, [boards]);
+  }, [boards, initialPictureList.length]);
 
   return (
     <>
+      <div>Phase {phase}</div>
       {showDone && <div onClick={onDone}>Done</div>}
       <div className="Pictures">
         {pictureList.map((picture) => (
@@ -146,19 +155,18 @@ function DragDrop({initialPictureList, setPhaseScore}) {
 }
 
 function Board({ boardName, boards, setBoards, setPictureList, setScore, score, initialPictureList }) {
-  // Using the custom hook to create a drop target for each board
   const { isOver, drop } = useDropTarget(boardName, boards, setBoards, setPictureList, setScore, initialPictureList);
-  
+
   return (
     <div className="flex flex-column">
-    <div className={`Board ${isOver ? "highlight" : ""}`} ref={drop}>
-      {boards[boardName].map((picture) => (
-        <Picture key={picture.id} url={picture.url} id={picture.id} />
-      ))}
-    </div>
-    <p>{score}</p>
+      <div className={`Board ${isOver ? "highlight" : ""}`} ref={drop}>
+        {boards[boardName].map((picture) => (
+          <Picture key={picture.id} url={picture.url} id={picture.id} />
+        ))}
+      </div>
+      <p>{score}</p>
     </div>
   );
 }
 
-export default DragDrop;
+export default DragDrop;
