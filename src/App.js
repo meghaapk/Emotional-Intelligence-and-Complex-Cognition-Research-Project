@@ -18,6 +18,36 @@ import Image12 from "./Images/Img12.png";
 import Image13 from "./Images/Img13.png";
 import Image14 from "./Images/Img14.png";
 import Image15 from "./Images/Img15.png";
+import Image16 from "./Images/Img16.png";
+import Image17 from "./Images/Img17.png";
+import Image18 from "./Images/Img18.png";
+import Image19 from "./Images/Img19.png";
+import Image20 from "./Images/Img20.png";
+import Image21 from "./Images/Img21.png";
+import Image22 from "./Images/Img22.png";
+import Image23 from "./Images/Img23.png";
+import Image24 from "./Images/Img24.png";
+import Image25 from "./Images/Img25.png";
+import Image26 from "./Images/Img26.png";
+import Image27 from "./Images/Img27.png";
+import Image28 from "./Images/Img28.png";
+import Image29 from "./Images/Img29.png";
+import Image30 from "./Images/Img30.png";
+import Image31 from "./Images/Img31.png";
+import Image32 from "./Images/Img32.png";
+import Image33 from "./Images/Img33.png";
+import Image34 from "./Images/Img34.png";
+import Image35 from "./Images/Img35.png";
+import Image36 from "./Images/Img36.png";
+import Image37 from "./Images/Img37.png";
+import Image38 from "./Images/Img38.png";
+import Image39 from "./Images/Img39.png";
+import Image40 from "./Images/Img40.png";
+import Image41 from "./Images/Img41.png";
+import Image42 from "./Images/Img42.png";
+import Image43 from "./Images/Img43.png";
+import Image44 from "./Images/Img44.png";
+import Image45 from "./Images/Img45.png";
 
 // Initial list of pictures with their IDs and URLs
 const phase1list = [
@@ -39,24 +69,39 @@ const phase1list = [
 ];
 
 const phase2list = [
-  { id: 1, url: Image1 },
-  { id: 2, url: Image2 },
-  { id: 3, url: Image3 },
-  { id: 4, url: Image4 },
-  { id: 5, url: Image5 },
-  { id: 6, url: Image6 },
-  { id: 7, url: Image7 },
-  { id: 8, url: Image8 },
-  { id: 9, url: Image9 },
+  { id: 16, url: Image16 },
+  { id: 17, url: Image17 },
+  { id: 18, url: Image18 },
+  { id: 19, url: Image19 },
+  { id: 20, url: Image20 },
+  { id: 21, url: Image21 },
+  { id: 22, url: Image22 },
+  { id: 23, url: Image23 },
+  { id: 24, url: Image24 },
+  { id: 25, url: Image25 },
+  { id: 26, url: Image26 },
+  { id: 27, url: Image27 },
+  { id: 28, url: Image28 },
+  { id: 29, url: Image29 },
+  { id: 30, url: Image30 },
+  { id: 31, url: Image31 },
+  { id: 32, url: Image32 },
+  { id: 33, url: Image33 },
+  { id: 34, url: Image34 },
+  { id: 35, url: Image35 },
 ];
 
 const phase3list = [
-  { id: 10, url: Image10 },
-  { id: 11, url: Image11 },
-  { id: 12, url: Image12 },
-  { id: 13, url: Image13 },
-  { id: 14, url: Image14 },
-  { id: 15, url: Image15 },
+  { id: 36, url: Image36 },
+  { id: 37, url: Image37 },
+  { id: 38, url: Image38 },
+  { id: 39, url: Image39 },
+  { id: 40, url: Image40 },
+  { id: 41, url: Image41 },
+  { id: 42, url: Image42 },
+  { id: 43, url: Image43 },
+  { id: 44, url: Image44 },
+  { id: 45, url: Image45 },
 ];
 
 function App() {
