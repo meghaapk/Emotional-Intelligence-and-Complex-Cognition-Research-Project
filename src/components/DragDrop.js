@@ -137,18 +137,54 @@ function DragDrop({ initialPictureList, setPhaseScore, phase }) {
         ))}
       </div>
       <div style={{ display: "flex" }}>
-        {Object.keys(boards).map((boardName) => (
-          <Board
-            key={boardName}
-            boardName={boardName}
-            boards={boards}
-            setBoards={setBoards}
-            setPictureList={setPictureList}
-            setScore={setScore}
-            score={score[boardName]}
-            initialPictureList={initialPictureList}
-          />
-        ))}
+        {phase === "1" && (
+          <>
+            {Object.keys(boards).map((boardName) => (
+              <Board
+                key={boardName}
+                boardName={boardName}
+                boards={boards}
+                setBoards={setBoards}
+                setPictureList={setPictureList}
+                setScore={setScore}
+                score={score[boardName]}
+                initialPictureList={initialPictureList}
+              />
+            ))}
+          </>
+        )}
+        {phase === "2" && (
+          <>
+            {Object.keys(boards).map((boardName) => (
+              <Board
+                key={boardName}
+                boardName={boardName}
+                boards={boards}
+                setBoards={setBoards}
+                setPictureList={setPictureList}
+                setScore={setScore}
+                score={score[boardName]}
+                initialPictureList={initialPictureList}
+              />
+            ))}
+          </>
+        )}
+        {phase === "3" && (
+          <>
+            {Object.keys(boards).map((boardName) => (
+              <Board
+                key={boardName}
+                boardName={boardName}
+                boards={boards}
+                setBoards={setBoards}
+                setPictureList={setPictureList}
+                setScore={setScore}
+                score={score[boardName]}
+                initialPictureList={initialPictureList}
+              />
+            ))}
+          </>
+        )}
       </div>
     </>
   );
