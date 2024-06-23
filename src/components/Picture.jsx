@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDrag } from "react-dnd";
-import Modal from "./Modal"; // Make sure to import the Modal component
 
-function Picture({ id, url }) {
-  const [showModal, setShowModal] = useState(false);
+function Picture({ id, url , showModal, setShowModal, setImageUrl }) {
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "image",
@@ -15,24 +13,25 @@ function Picture({ id, url }) {
 
   const handleMouseEnter = () => {
     setShowModal(true);
+    setImageUrl(url);
   };
 
   const handleMouseLeave = () => {
     setShowModal(false);
+    setImageUrl("");
   };
 
   return (
     <>
       <img
         ref={drag}
-        alt={`Image ${id}`}
+        alt={`${id}`}
         src={url}
-        className={`picture ${isDragging ? "dragging" : ""}`}
+        className={`m-1 ${isDragging ? "dragging" : ""}`}
         width="150px"
         onClick={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        // onMouseLeave={handleMouseLeave}
       />
-      <Modal show={showModal} onClose={handleMouseLeave} url={url} />
     </>
   );
 }

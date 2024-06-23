@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import "./App.css";
 import DragDrop from "./components/DragDrop";
 import Image1 from "./Images/Img1.png"; // Importing images
 import Image2 from "./Images/Img2.png";
@@ -92,16 +93,29 @@ const phase2list = [
 ];
 
 const phase3list = [
-  { id: 36, url: Image36 },
-  { id: 37, url: Image37 },
-  { id: 38, url: Image38 },
-  { id: 39, url: Image39 },
-  { id: 40, url: Image40 },
-  { id: 41, url: Image41 },
-  { id: 42, url: Image42 },
-  { id: 43, url: Image43 },
-  { id: 44, url: Image44 },
-  { id: 45, url: Image45 },
+  { 
+    id: 36, 
+    url: Image36 , 
+    description : "This is a description for image 36",
+  },
+  { id: 37, url: Image37 ,
+    description : "This is a description for image 36",},
+  { id: 38, url: Image38 ,
+    description : "This is a description for image 36",},
+  { id: 39, url: Image39 ,
+    description : "This is a description for image 36",},
+  { id: 40, url: Image40 ,
+    description : "This is a description for image 36",},
+  { id: 41, url: Image41 ,
+    description : "This is a description for image 36",},
+  { id: 42, url: Image42,
+    description : "This is a description for image 36", },
+  { id: 43, url: Image43 ,
+    description : "This is a description for image 36",},
+  { id: 44, url: Image44,
+    description : "This is a description for image 36", },
+  { id: 45, url: Image45,
+    description : "This is a description for image 36", },
 ];
 
 function App() {
@@ -111,18 +125,9 @@ function App() {
 
   useEffect(() => {
     console.log('Phase 1 Score:', phase1score);
-  }, [phase1score]);
-
-  useEffect(() => {
-    console.log('Phase 1 Score:', phase1score);
-    console.log('Phase 2 Score:', phase2score);
-  }, [phase2score]);
-
-  useEffect(() => {
-    console.log('Phase 1 Score:', phase1score);
     console.log('Phase 2 Score:', phase2score);
     console.log('Phase 3 Score:', phase3score);
-  }, [phase3score]);
+  }, [phase3score, phase2score, phase1score]);
 
   return (
     <DndProvider backend={HTML5Backend}>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Picture from "./Picture";
 import { useDrop } from "react-dnd";
-import "../App.css";
 import { useNavigate } from "react-router-dom";
+import Modal from "./Modal";
 
 // Custom hook for creating drop targets
 function useDropTarget(boardName, boards, setBoards, setPictureList, setScore, initialPictureList) {
@@ -73,6 +73,9 @@ function useDropTarget(boardName, boards, setBoards, setPictureList, setScore, i
 function DragDrop({ initialPictureList, setPhaseScore, phase }) {
   const [pictureList, setPictureList] = useState([]);
   const [showDone, setShowDone] = useState(false);
+  const [imageUrl, setImageUrl] = useState(initialPictureList[0].url);
+  const [showModal, setShowModal] = useState(false);
+  const [start, setStart] = useState(true);
   const navigate = useNavigate();
   
   
@@ -114,9 +117,20 @@ function DragDrop({ initialPictureList, setPhaseScore, phase }) {
     setShowDone(false);
   }, [initialPictureList, phase]);
 
+  useEffect(() => {
+    if (start) {
+      // Set firstTime to false after 5 seconds
+      const timeout = setTimeout(() => {
+        setStart(false);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [start]);
+
   const onDone = () => {
     const avgScore = Object.values(score).reduce((acc, curr) => acc + curr, 0) / initialPictureList.length;
     setPhaseScore(avgScore);
+    setStart(true);
     if(phase >= "3")  navigate(`/result`);
     else navigate(`/phase${parseInt(phase) + 1}`);
   };
@@ -129,75 +143,95 @@ function DragDrop({ initialPictureList, setPhaseScore, phase }) {
 
   return (
     <>
-      <div>Phase {phase}</div>
-      {showDone && <div onClick={onDone}>Done</div>}
-      <div className="Pictures">
-        {pictureList.map((picture) => (
-          picture.visible && <Picture key={picture.id} url={picture.url} id={picture.id} />
-        ))}
-      </div>
-      <div style={{ display: "flex" }}>
-        {phase === "1" && (
-          <>
-            {Object.keys(boards).map((boardName) => (
-              <Board
-                key={boardName}
-                boardName={boardName}
-                boards={boards}
-                setBoards={setBoards}
-                setPictureList={setPictureList}
-                setScore={setScore}
-                score={score[boardName]}
-                initialPictureList={initialPictureList}
-              />
+      <h1 className='text-center text-5xl'>Emotional Intelligence And Complex Cognition Research</h1>
+      {start ?(
+        <div className={start ? "fade-out text-center text-3xl flex flex-col gap-5 items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold" : ""}>
+          <h1 className="text-5xl">Phase {phase}</h1>
+        </div>
+      ) : (
+        <>
+          <h1 className="text-center text-3xl mt-5">Phase {phase}</h1>
+          <p className="text-center">Drag and drop the below images</p>
+          <Modal show={showModal} onClose={() => setShowModal(false)} url={imageUrl} />
+          {showDone && <div onClick={onDone} className="px-5 py-1 bg-green-500 w-fit ml-auto mr-2">Done -{">"}</div>}
+          <div className="flex flex-row flex-wrap items-center px-10 border w-11/12 mx-auto">
+            {pictureList.map((picture) => (
+              picture.visible && <Picture key={picture.id} url={picture.url} id={picture.id} showModal={showModal} setShowModal={setShowModal} setImageUrl={setImageUrl}/>
             ))}
-          </>
-        )}
-        {phase === "2" && (
-          <>
-            {Object.keys(boards).map((boardName) => (
-              <Board
-                key={boardName}
-                boardName={boardName}
-                boards={boards}
-                setBoards={setBoards}
-                setPictureList={setPictureList}
-                setScore={setScore}
-                score={score[boardName]}
-                initialPictureList={initialPictureList}
-              />
-            ))}
-          </>
-        )}
-        {phase === "3" && (
-          <>
-            {Object.keys(boards).map((boardName) => (
-              <Board
-                key={boardName}
-                boardName={boardName}
-                boards={boards}
-                setBoards={setBoards}
-                setPictureList={setPictureList}
-                setScore={setScore}
-                score={score[boardName]}
-                initialPictureList={initialPictureList}
-              />
-            ))}
-          </>
-        )}
-      </div>
+          </div>
+          <div className="flex flex-row justify-evenly mt-4">
+            {phase === "1" && (
+              <>
+                {Object.keys(boards).map((boardName) => (
+                  <Board
+                    key={boardName}
+                    boardName={boardName}
+                    boards={boards}
+                    setBoards={setBoards}
+                    setPictureList={setPictureList}
+                    setScore={setScore}
+                    score={score[boardName]}
+                    initialPictureList={initialPictureList}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    setImageUrl={setImageUrl}
+                  />
+                ))}
+              </>
+            )}
+            {phase === "2" && (
+              <>
+                {Object.keys(boards).map((boardName) => (
+                  <Board
+                    key={boardName}
+                    boardName={boardName}
+                    boards={boards}
+                    setBoards={setBoards}
+                    setPictureList={setPictureList}
+                    setScore={setScore}
+                    score={score[boardName]}
+                    initialPictureList={initialPictureList}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    setImageUrl={setImageUrl}
+                  />
+                ))}
+              </>
+            )}
+            {phase === "3" && (
+              <>
+                {Object.keys(boards).map((boardName) => (
+                  <Board
+                    key={boardName}
+                    boardName={boardName}
+                    boards={boards}
+                    setBoards={setBoards}
+                    setPictureList={setPictureList}
+                    setScore={setScore}
+                    score={score[boardName]}
+                    initialPictureList={initialPictureList}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    setImageUrl={setImageUrl}
+                  />
+                ))}
+              </>
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 }
 
-function Board({ boardName, boards, setBoards, setPictureList, setScore, score, initialPictureList }) {
+function Board({ boardName, boards, setBoards, setPictureList, setScore, score, initialPictureList , showModal, setShowModal, setImageUrl}) {
   const { isOver, drop } = useDropTarget(boardName, boards, setBoards, setPictureList, setScore, initialPictureList);
 
   return (
-    <div className="flex flex-column">
-      <div className={`Board ${isOver ? "highlight" : ""}`} ref={drop}>
+    <div className="flex flex-col">
+      <div className={`border-solid border-2 p-5 min-w-64 min-h-80 flex-wrap`} ref={drop}>
         {boards[boardName].map((picture) => (
-          <Picture key={picture.id} url={picture.url} id={picture.id} />
+          <Picture key={picture.id} url={picture.url} id={picture.id} showModal={showModal} setShowModal={setShowModal} setImageUrl={setImageUrl} description={picture.description}/>
         ))}
       </div>
       <p>{score}</p>
