@@ -33,7 +33,7 @@ export default function Home() {
                 <a className="ml-1 font-bold" href="mailto:megha.smiblr2023@learner.manipal.edu">megha.smiblr2023@learner.manipal.edu</a>
             </div>
         </div>
-        <form className="text-center flex flex-col border w-7/12 mx-auto p-5 mt-5">
+        <form className="text-left flex flex-col border w-7/12 mx-auto p-5 mt-5">
             <label>
               <span className="mr-2">I consent to participate in the research</span>
                 <input
@@ -44,7 +44,7 @@ export default function Home() {
                 />
             </label>
             {userData.consent && (
-                <div className="flex flex-col mx-auto gap-2 text-left">
+                <div className="flex flex-col mx-auto gap-2">
                     <label className="flex flex-row w-full">
                     Name:
                     <input
@@ -84,14 +84,33 @@ export default function Home() {
                     </label>
                     <label className="flex flex-row w-full">
                     Are you constantly exposed to Sanskrit language learning or usage. This includes individuals enrolled in Sanskrit language programs, individuals practicing Sanskrit mantras, or those belonging to communities where Sanskrit is used frequently.
-                    <input
-                        type="radio"
-                        value={userData.education}
-                        onChange={(e) => setUserData({ ...userData, exposed: e.target.value })}
-                    />
+                    {/* yes or no radio button */}
+                    <div className="flex flex-row w-1/2 justify-evenly">
+                        <label htmlFor="yes">
+                            <p>Yes</p>
+                            <input
+                                type="radio"
+                                id="yes"
+                                name="exposed"
+                                value="Yes"
+                                onChange={(e) => setUserData({ ...userData, exposed: e.target.value })}
+                            />
+                        </label>
+
+                        <label htmlFor="no">
+                            <p>No</p>
+                        <input  
+                            type="radio"
+                            id="no"
+                            name="exposed"
+                            value="No"
+                            onChange={(e) => setUserData({ ...userData, exposed: e.target.value })}
+                        />
+                        </label>
+                    </div>
                     </label>
                     <button type="submit"
-                        className="bg-blue-500 text-white px-5 py-2 mt-5"
+                        className="bg-blue-500 text-white px-5 py-2 mt-5 w-3/4 mx-auto"
                         onClick={(e) => {
                             e.preventDefault();
                             if(userData.name === "" || userData.age === "" || userData.education === "" || userData.gender === "" || userData.exposed === "") {
