@@ -49,6 +49,7 @@ import Image42 from "./Images/Img42.png";
 import Image43 from "./Images/Img43.png";
 import Image44 from "./Images/Img44.png";
 import Image45 from "./Images/Img45.png";
+import Home from "./components/Home";
 
 // Initial list of pictures with their IDs and URLs
 const phase1list = [
@@ -136,6 +137,10 @@ function App() {
           <Routes>
             <Route
               path="/"
+              element={<Home/>}
+            />
+            <Route
+              path="/phase1"
               element={
                 <DragDrop
                   phase="1"
