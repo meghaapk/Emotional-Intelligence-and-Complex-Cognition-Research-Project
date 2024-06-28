@@ -17,15 +17,23 @@ export default function Home() {
         <h1 className="text-3xl"> Emotional Intelligence and Complex Cognition Research</h1>
         <div className="text-left w-9/12 mx-auto border-2 p-5 mt-5">
             <p className="font-bold">Greetings !</p>
-            <p>You are being asked to take part in a study conducted by Megha from Srishti Manipal Institute of Art , Design and Technology . </p>
-            <p>As part of my research , I aim to study and analyze" Relationship between Emotional Intelligence and Complex Cognition " . This survey is designed to collect the demographics and consent .</p>
-            <p><span className="font-bold">Eligibility :</span> 18-29 year-olds </p>
-            <p><span className="font-bold">Ethical Considerations :</span> Participation in this study is completely voluntary, This session may be recorded (Audio , Video and Photographs)for research purposes only and you may withdraw from the study at any time. All of the information that you provide in this survey will be kept confidential. Your responses will be aggregated with the responses of other participants, and your individual identity will not be revealed.</p>
+            <p>You are being asked to take part in a study conducted by Megha from Srishti Manipal Institute of Art , Design and Technology.</p>
+            <p>As part of my research , I aim to study and analyze "Relationship between Emotional Intelligence and Complex Cognition". This survey is designed to collect the demographics and consent.</p>
+            <p>
+                <span className="font-bold">Eligibility :</span> 
+                18-29 year-olds 
+            </p>
+            <p>
+                <span className="font-bold">Ethical Considerations :</span> 
+                Participation in this study is completely voluntary, This session may be recorded (Audio , Video and Photographs)for research purposes only and you may withdraw from the study at any time. 
+                All of the information that you provide in this survey will be kept confidential. Your responses will be aggregated with the responses of other participants, and your individual identity will not be revealed.</p>
             <p>The results of this survey will be used to understand the demographics and consent to the study. The results may be published in academic journals or presented at conferences, but your individual identity will not be revealed. </p>
-            <div className="flex flex-row">If you have any questions or concerns about this survey, please contact the researcher at <a className="ml-1 font-bold" href="mailto:megha.smiblr2023@learner.manipal.edu">megha.smiblr2023@learner.manipal.edu</a>
+            <div className="flex flex-row">
+                If you have any questions or concerns about this survey, please contact the researcher at 
+                <a className="ml-1 font-bold" href="mailto:megha.smiblr2023@learner.manipal.edu">megha.smiblr2023@learner.manipal.edu</a>
             </div>
         </div>
-        <form className="text-center flex flex-col border w-7/12 mx-auto p-5">
+        <form className="text-center flex flex-col border w-7/12 mx-auto p-5 mt-5">
             <label>
               <span className="mr-2">I consent to participate in the research</span>
                 <input
@@ -87,7 +95,6 @@ export default function Home() {
                         onClick={(e) => {
                             e.preventDefault();
                             if(userData.name === "" || userData.age === "" || userData.education === "" || userData.gender === "" || userData.exposed === "") {
-                                console.log(userData);
                                 alert("Please fill all the fields");
                             } else {
                                 if(userData.age < 18 || userData.age > 29) {
