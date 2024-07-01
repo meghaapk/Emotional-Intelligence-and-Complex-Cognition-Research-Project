@@ -1,6 +1,6 @@
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Main';
 import './index.css'
 
@@ -49,8 +49,11 @@ import Image42 from "./Images/Img42.png";
 import Image43 from "./Images/Img43.png";
 import Image44 from "./Images/Img44.png";
 import Image45 from "./Images/Img45.png";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DragDrop from './pages/phase';
+import Results from './pages/Results';
+import { collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { db } from './pages/firebase';
 const phase1list = [
   { id: 1, url: Image1 },
   { id: 2, url: Image2 },
@@ -118,15 +121,47 @@ const phase3list = [
     description : "This is a description for image 36", },
 ];
 function App() {
+  const [userData, setUserData] = useState({
+    consent: false,
+    name: "",
+    email: "",
+    age: "",
+    gender: "",
+    education: "",
+    exposed: false,
+    phase1: 0,
+    phase2: 0,
+    phase3: 0,
+});
   const [phase1score, setPhase1Score] = useState(0);
   const [phase2score, setPhase2Score] = useState(0);
   const [phase3score, setPhase3Score] = useState(0);
+
+  const updateFirebaseResults = async () => {
+    // Update the Firebase database with the user's results
+    const usersCollection = collection(db, 'users');
+    const q = query(usersCollection, where("email", "==", userData.email));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const userDoc = querySnapshot.docs[0];
+      await updateDoc(userDoc.ref, {
+        phase1: phase1score,
+        phase2: phase2score,
+        phase3: phase2score,
+      });
+    }
+  }
+
+  useEffect(() => {
+    console.log("Updating user data with scores:", phase1score, phase2score, phase3score);
+    updateFirebaseResults();
+  }, [phase1score, phase2score, phase3score]);
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="App">
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home userData={userData} setUserData={setUserData} />} />
             <Route
                 path="/phase1"
                 element={
@@ -159,14 +194,7 @@ function App() {
               />
               <Route
                 path="/result"
-                element={
-                  <div>
-                    <h1>Results</h1>
-                    <p>Phase 1 Score: {phase1score}</p>
-                    <p>Phase 2 Score: {phase2score}</p>
-                    <p>Phase 3 Score: {phase3score}</p>
-                  </div>
-                }
+                element={<Results phase1score={phase1score} phase2score={phase2score} phase3score={phase3score} />}
               />
           </Routes>
         </BrowserRouter>

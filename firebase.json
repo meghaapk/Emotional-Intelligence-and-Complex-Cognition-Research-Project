@@ -11,13 +11,10 @@
     }
   },
   "storage": {
-    "rules": "storage.rules",
-    "cors": [
-      {
-        "origin": ["*"],
-        "method": ["GET", "POST", "PUT", "DELETE"],
-        "maxAgeSeconds": 3600
-      }
-    ]
+    "rules": "storage.rules"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }

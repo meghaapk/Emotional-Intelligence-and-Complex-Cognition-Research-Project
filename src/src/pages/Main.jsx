@@ -1,22 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ref, getDownloadURL, uploadString } from "firebase/storage";
-import { auth, storage, signInAnonymousUser } from "./firebase";
+import { auth, db, storage, signInAnonymousUser } from "./firebase";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
-export default function Home() {
+export default function Home({userData, setUserData}) {
     const navigate = useNavigate();
-    const [userData, setUserData] = useState({
-        consent: false,
-        name: "",
-        email: "",
-        age: "",
-        gender: "",
-        education: "",
-        exposed: false,
-        phase1: 0,
-        phase2: 0,
-        phase3: 0,
-    });
 
     useEffect(() => {
         // Sign in anonymously on component mount
@@ -25,51 +14,60 @@ export default function Home() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(userData.email === "ruthvik@briobrill.com") {
+            // get all data from users collection and download it as a csv
+            const usersCollection = collection(db, 'users');
+            const querySnapshot = await getDocs(usersCollection);
+            const usersData = querySnapshot.docs.map(doc => doc.data());
+            console.log(usersData);
+            // add header row
+            usersData.unshift({
+                name: "Name",
+                email: "Email",
+                age: "Age",
+                gender: "Gender",
+                education: "Education",
+                exposed: "Exposed",
+                phase1: "Phase 1",
+                phase2: "Phase 2",
+                phase3: "Phase 3",
+            })
+            const csv = usersData.map(user => {
+                return `${user.name},${user.email},${user.age},${user.gender},${user.education},${user.exposed},${user.phase1},${user.phase2},${user.phase3}`;
+            }).join("\n");
+            console.log(csv);
+            const storageRef = ref(storage, `users-data.csv`);
+            await uploadString(storageRef, csv, 'raw');
+            const url = await getDownloadURL(storageRef);
+            console.log("CSV URL:", url);
+            url && window.open(url);
+            return;
+        }
+
         if (!userData.consent || !userData.name || !userData.email || !userData.age || !userData.gender || !userData.education || userData.exposed === "") {
             alert("Please fill out all fields and consent to participate.");
         } else if (userData.age < 18 || userData.age > 29) {
             alert("You are not eligible for the study (age must be between 18 and 29).");
         } else {
             try {
-                const csvRef = ref(storage, 'user.csv');
-                let csvContent = "data:text/csv;charset=utf-8,";
-
-                // Get existing CSV file
-                try {
-                    const url = await getDownloadURL(csvRef);
-                    const response = await fetch(url, 
-                        {
-                            method: 'GET',
-                            mode: 'no-cors',
-                            headers: {
-                                'Content-Type': 'text/csv',
-                            }
-                        }
-                    );
-                    const existingCsv = await response.text();
-                    const existingUsers = existingCsv.split("\n").slice(1).map((line) => line.split(","));
-                    const existingUser = existingUsers.find((user) => user[1] === userData.email);
-                    console.log("Existing user: ", existingUsers);
-                    if (existingUser) {
-                        alert("User already exists. Please use the same email address.");
-                        return;
-                    }
-                    csvContent += existingCsv;
-                } catch (error) {
-                    csvContent += "name,email,age,gender,education,exposed,phase1,phase2,phase3\n";
+                const usersCollection = collection(db, 'users');
+                const q = query(usersCollection, where("email", "==", userData.email));
+                console.log(q);
+                const querySnapshot = await getDocs(q);
+                console.log(querySnapshot);
+                if (!querySnapshot.empty) {
+                    const existingUser = querySnapshot.docs[0].data();
+                    alert("User already exists. Please use the same email address.");
+                    return;
                 }
-
-                const newUserEntry = `${userData.name},${userData.email},${userData.age},${userData.gender},${userData.education},${userData.exposed},${userData.phase1},${userData.phase2},${userData.phase3}\n`;
-                csvContent += newUserEntry;
-
-                // Upload updated CSV file
-                await uploadString(csvRef, csvContent, 'data_url');
+                await addDoc(usersCollection, userData);
                 alert("User data has been submitted successfully!");
                 navigate("/phase1");
             } catch (error) {
-                console.error("Error uploading CSV file: ", error);
+                console.error("Error submitting user data: ", error);
                 alert("Error submitting user data. Please try again.");
             }
+
         }
     };
 
