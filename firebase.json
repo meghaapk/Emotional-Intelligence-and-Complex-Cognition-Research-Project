@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "source": "src",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "asia-east1"
+    }
+  },
+  "storage": {
+    "rules": "storage.rules",
+    "cors": [
+      {
+        "origin": ["*"],
+        "method": ["GET", "POST", "PUT", "DELETE"],
+        "maxAgeSeconds": 3600
+      }
+    ]
+  }
+}

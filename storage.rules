@@ -1,0 +1,15 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow authenticated users to read and write
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Allow read access to user.csv for specified origins
+    match /user.csv {
+      allow read: if request.method == 'GET' &&
+        request.origin in ['https://emotional-intelligence-researc.web.app', 'http://localhost:5173'];
+    }
+  }
+}
