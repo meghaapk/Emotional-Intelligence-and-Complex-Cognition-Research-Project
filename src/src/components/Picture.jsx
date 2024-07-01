@@ -1,7 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 
-function Picture({ id, url , showModal, setShowModal, setImageUrl }) {
+function Picture({ id, url , showModal, setShowModal, setImageUrl , description, setDescription}) {
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "image",
@@ -14,6 +14,9 @@ function Picture({ id, url , showModal, setShowModal, setImageUrl }) {
   const handleMouseEnter = () => {
     setShowModal(true);
     setImageUrl(url);
+    if(description) {
+      setDescription(description);
+    }
   };
 
   const handleMouseLeave = () => {
