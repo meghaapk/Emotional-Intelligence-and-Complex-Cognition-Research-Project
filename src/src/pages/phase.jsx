@@ -154,8 +154,8 @@ function DragDrop({ initialPictureList, setPhaseScore, phase }) {
           <h1 className="text-center text-3xl mt-5">Phase {phase}</h1>
           <p className="text-center">Drag and drop the below images</p>
           <Modal show={showModal} onClose={() => setShowModal(false)} url={imageUrl} description={description} />
-          {showDone && <div onClick={onDone} className="px-5 py-1 bg-green-500 w-fit ml-auto mr-2">Done -{">"}</div>}
-          <div className="flex flex-row flex-wrap items-center px-10 border w-11/12 mx-auto">
+          {showDone && <div onClick={onDone} className="px-5 py-1 bg-green-500 w-fit mx-auto my-5">Done -{">"}</div>}
+          <div className="flex flex-row flex-wrap items-center px-10 w-11/12 mx-auto">
             {pictureList.map((picture) => (
               picture.visible && <Picture key={picture.id} url={picture.url} 
               id={picture.id} 
@@ -242,7 +242,6 @@ function Board({ boardName, boards, setBoards, setPictureList, setScore, score, 
           <Picture key={picture.id} url={picture.url} id={picture.id} showModal={showModal} setShowModal={setShowModal} setImageUrl={setImageUrl} description={picture.description}/>
         ))}
       </div>
-      <p>{score}</p>
     </div>
   );
 }

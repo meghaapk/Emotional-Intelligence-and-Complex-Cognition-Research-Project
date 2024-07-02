@@ -73,29 +73,7 @@ const phase1list = [
 ];
 
 const phase2list = [
-  { id: 16, url: Image16 },
-  { id: 17, url: Image17 },
-  { id: 18, url: Image18 },
-  { id: 19, url: Image19 },
-  { id: 20, url: Image20 },
-  { id: 21, url: Image21 },
-  { id: 22, url: Image22 },
-  { id: 23, url: Image23 },
-  { id: 24, url: Image24 },
-  { id: 25, url: Image25 },
-  { id: 26, url: Image26 },
-  { id: 27, url: Image27 },
-  { id: 28, url: Image28 },
-  { id: 29, url: Image29 },
-  { id: 30, url: Image30 },
-  { id: 31, url: Image31 },
-  { id: 32, url: Image32 },
-  { id: 33, url: Image33 },
-  { id: 34, url: Image34 },
-  { id: 35, url: Image35 },
-];
 
-const phase3list = [
   { 
     id: 36, 
     url: Image36 , 
@@ -120,6 +98,29 @@ const phase3list = [
   { id: 45, url: Image45,
     description : "This is a description for image 45", },
 ];
+
+const phase3list = [
+  { id: 16, url: Image16 },
+  { id: 17, url: Image17 },
+  { id: 18, url: Image18 },
+  { id: 19, url: Image19 },
+  { id: 20, url: Image20 },
+  { id: 21, url: Image21 },
+  { id: 22, url: Image22 },
+  { id: 23, url: Image23 },
+  { id: 24, url: Image24 },
+  { id: 25, url: Image25 },
+  { id: 26, url: Image26 },
+  { id: 27, url: Image27 },
+  { id: 28, url: Image28 },
+  { id: 29, url: Image29 },
+  { id: 30, url: Image30 },
+  { id: 31, url: Image31 },
+  { id: 32, url: Image32 },
+  { id: 33, url: Image33 },
+  { id: 34, url: Image34 },
+  { id: 35, url: Image35 },
+];
 function App() {
   const [userData, setUserData] = useState({
     consent: false,
@@ -139,6 +140,7 @@ function App() {
 
   const updateFirebaseResults = async () => {
     // Update the Firebase database with the user's results
+    if(!userData.email) return;
     const usersCollection = collection(db, 'users');
     const q = query(usersCollection, where("email", "==", userData.email));
     const querySnapshot = await getDocs(q);
@@ -153,7 +155,6 @@ function App() {
   }
 
   useEffect(() => {
-    console.log("Updating user data with scores:", phase1score, phase2score, phase3score);
     updateFirebaseResults();
   }, [phase1score, phase2score, phase3score]);
   return (

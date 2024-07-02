@@ -6,6 +6,7 @@ import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 export default function Home({userData, setUserData}) {
     const navigate = useNavigate();
+    const [errorText, setErrorText] = useState("");
 
     useEffect(() => {
         // Sign in anonymously on component mount
@@ -45,9 +46,11 @@ export default function Home({userData, setUserData}) {
         }
 
         if (!userData.consent || !userData.name || !userData.email || !userData.age || !userData.gender || !userData.education || userData.exposed === "") {
-            alert("Please fill out all fields and consent to participate.");
+            setErrorText("Please fill in all the fields.")
+            return
         } else if (userData.age < 18 || userData.age > 29) {
-            alert("You are not eligible for the study (age must be between 18 and 29).");
+            setErrorText("You are not eligible for this study.")
+            return
         } else {
             try {
                 const usersCollection = collection(db, 'users');
@@ -57,11 +60,10 @@ export default function Home({userData, setUserData}) {
                 console.log(querySnapshot);
                 if (!querySnapshot.empty) {
                     const existingUser = querySnapshot.docs[0].data();
-                    alert("User already exists. Please use the same email address.");
+                    setErrorText("User with this email already exists.");
                     return;
                 }
                 await addDoc(usersCollection, userData);
-                alert("User data has been submitted successfully!");
                 navigate("/phase1");
             } catch (error) {
                 console.error("Error submitting user data: ", error);
@@ -73,8 +75,8 @@ export default function Home({userData, setUserData}) {
 
     return (
         <div className="text-center">
-            <h1 className="text-3xl mt-5">Emotional Intelligence and Complex Cognition Research</h1>
-            <div className="text-left w-7/12 mx-auto border-2 p-5 mt-5">
+            <h1 className="text-6xl fade-in-up" >Emotional Intelligence and Complex Cognition Research</h1>
+            <div className="text-left w-7/12 mx-auto border-2 p-5 mt-5 fade-in-delay">
                 <p className="font-bold">Greetings !</p>
                 <p>You are being asked to take part in a study conducted by Megha from Srishti Manipal Institute of Art , Design and Technology.</p>
                 <p>As part of my research , I aim to study and analyze "Relationship between Emotional Intelligence and Complex Cognition". This survey is designed to collect the demographics and consent.</p>
@@ -92,7 +94,7 @@ export default function Home({userData, setUserData}) {
                     <a className="ml-1 font-bold" href="mailto:megha.smiblr2023@learner.manipal.edu">megha.smiblr2023@learner.manipal.edu</a>
                 </div>
             </div>
-            <form className="text-left flex flex-col border w-7/12 mx-auto p-5 mt-5">
+            <form className="text-left flex flex-col border w-7/12 mx-auto p-5 mt-5 fade-in-delay">
                 <label>
                     <span className="mr-2">I consent to participate in the research</span>
                     <input
@@ -125,7 +127,7 @@ export default function Home({userData, setUserData}) {
                             Age:
                             <input
                                 type="number"
-                                className="border border-gray-500 ml-2"
+                                className="border border-gray-500 ml-5"
                                 value={userData.age}
                                 onChange={(e) => setUserData({ ...userData, age: e.target.value })}
                             />
@@ -186,6 +188,7 @@ export default function Home({userData, setUserData}) {
                         </button>
                     </div>
                 )}
+                <p className="text-center text-red-600">{errorText}</p>
             </form>
         </div>
     );

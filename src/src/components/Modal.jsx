@@ -4,10 +4,8 @@ function Modal({ show, onClose, url, description }) {
   const handleStories = (e) => {
     e.stopPropagation()
     if(description) {
-      console.log('description', description);
       setShowStories(!showStories)
     }
-    console.log('handleStories');
   }
   return (
     <>
@@ -24,12 +22,6 @@ function Modal({ show, onClose, url, description }) {
           </div>
         </div>
       )}
-      {/* {show && description && (
-        <div className="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit scale-150" onClick={handleStories}>
-          <p onClick={onClose} className="text-white ml-auto w-fit">X</p>
-          <p className="text-white">{description}</p>
-        </div>
-      )} */}
     </>
   );
 }
