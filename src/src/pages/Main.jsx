@@ -64,7 +64,7 @@ export default function Home({userData, setUserData}) {
                     return;
                 }
                 await addDoc(usersCollection, userData);
-                navigate("/phase1");
+                navigate("/trail");
             } catch (error) {
                 console.error("Error submitting user data: ", error);
                 alert("Error submitting user data. Please try again.");

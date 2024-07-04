@@ -70,7 +70,7 @@ function useDropTarget(boardName, boards, setBoards, setPictureList, setScore, i
   return { isOver, drop };
 }
 
-function DragDrop({ initialPictureList, setPhaseScore, phase }) {
+function DragDrop({ initialPictureList, setPhaseScore, phase , phaseDescription }) {
   const [pictureList, setPictureList] = useState([]);
   const [showDone, setShowDone] = useState(false);
   const [imageUrl, setImageUrl] = useState(initialPictureList[0].url);
@@ -118,22 +118,17 @@ function DragDrop({ initialPictureList, setPhaseScore, phase }) {
     setShowDone(false);
   }, [initialPictureList, phase]);
 
-  useEffect(() => {
-    if (start) {
-      // Set firstTime to false after 5 seconds
-      const timeout = setTimeout(() => {
-        setStart(false);
-      }, 2000);
-      return () => clearTimeout(timeout);
-    }
-  }, [start]);
-
   const onDone = () => {
-    const avgScore = Object.values(score).reduce((acc, curr) => acc + curr, 0) / initialPictureList.length;
-    setPhaseScore(avgScore);
-    setStart(true);
+    if(phase !== "trail") {
+      const avgScore = Object.values(score).reduce((acc, curr) => acc + curr, 0) / initialPictureList.length;
+      setPhaseScore(avgScore);
+    }
+      setStart(true);
+    if(phase === "trail") navigate(`/phase1`);
+    else {
     if(phase >= "3")  navigate(`/result`);
     else navigate(`/phase${parseInt(phase) + 1}`);
+    }
   };
 
   useEffect(() => {
@@ -142,12 +137,18 @@ function DragDrop({ initialPictureList, setPhaseScore, phase }) {
     }
   }, [boards, initialPictureList.length]);
 
+  const handleStart = () => {
+    setStart(false);
+  }
+
   return (
     <>
       <h1 className='text-center text-5xl'>Emotional Intelligence And Complex Cognition Research</h1>
-      {start ?(
-        <div className={start ? "fade-out text-center text-3xl flex flex-col gap-5 items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold" : ""}>
+      {start ? (
+        <div className={start ? "text-center text-3xl flex flex-col gap-5 items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold" : ""}>
           <h1 className="text-5xl">Phase {phase}</h1>
+          <p>{phaseDescription}</p>
+          <div className="w-fit bg-green-500 px-5" onClick={handleStart}>Start</div>
         </div>
       ) : (
         <>
@@ -168,6 +169,25 @@ function DragDrop({ initialPictureList, setPhaseScore, phase }) {
             ))}
           </div>
           <div className="flex flex-row justify-evenly mt-4">
+            {phase === "trail" && (
+              <>
+                {Object.keys(boards).map((boardName) => (
+                  <Board
+                    key={boardName}
+                    boardName={boardName}
+                    boards={boards}
+                    setBoards={setBoards}
+                    setPictureList={setPictureList}
+                    setScore={setScore}
+                    score={score[boardName]}
+                    initialPictureList={initialPictureList}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    setImageUrl={setImageUrl}
+                  />
+                ))}
+              </>
+            )}
             {phase === "1" && (
               <>
                 {Object.keys(boards).map((boardName) => (

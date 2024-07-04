@@ -54,6 +54,19 @@ import DragDrop from './pages/phase';
 import Results from './pages/Results';
 import { collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { db } from './pages/firebase';
+
+const phaseTraillist = [
+  { id: 1, url: Image1 },
+  { id: 2, url: Image2 },
+  { id: 3, url: Image3 },
+  { id: 4, url: Image4 },
+  { id: 5, url: Image5 },
+  { id: 6, url: Image6 },
+  { id: 7, url: Image7 },
+  { id: 8, url: Image8 },
+  { id: 9, url: Image9 },
+];
+
 const phase1list = [
   { id: 1, url: Image1 },
   { id: 2, url: Image2 },
@@ -164,39 +177,53 @@ function App() {
           <Routes>
             <Route path="/" element={<Home userData={userData} setUserData={setUserData} />} />
             <Route
-                path="/phase1"
-                element={
-                  <DragDrop
-                    phase="1"
-                    initialPictureList={phase1list}
-                    setPhaseScore={setPhase1Score}
-                  />
-                }
-              />
-              <Route
-                path="/phase2"
-                element={
-                  <DragDrop
-                    phase="2"
-                    initialPictureList={phase2list}
-                    setPhaseScore={setPhase2Score}
-                  />
-                }
-              />
-              <Route
-                path="/phase3"
-                element={
-                  <DragDrop
-                    phase="3"
-                    initialPictureList={phase3list}
-                    setPhaseScore={setPhase3Score}
-                  />
-                }
-              />
-              <Route
-                path="/result"
-                element={<Results phase1score={phase1score} phase2score={phase2score} phase3score={phase3score} />}
-              />
+              path="/trail"
+              element={
+                <DragDrop
+                  phase="trail"
+                  phaseDescription="Drag and drop the images to the correct position"
+                  initialPictureList={phaseTraillist}
+                  setPhaseScore={setPhase1Score}
+                />
+              }
+            />
+            <Route
+              path="/phase1"
+              element={
+                <DragDrop
+                  phase="1"
+                  phaseDescription="Drag and drop the images to the correct position"
+                  initialPictureList={phase1list}
+                  setPhaseScore={setPhase1Score}
+                />
+              }
+            />
+            <Route
+              path="/phase2"
+              element={
+                <DragDrop
+                  phase="2"
+                  phaseDescription="Drag and drop the images to the correct position"
+                  initialPictureList={phase2list}
+                  setPhaseScore={setPhase2Score}
+                />
+              }
+            />
+            <Route
+              path="/phase3"
+              element={
+                <DragDrop
+                  phase="3"
+                  phaseDescription="Drag and drop the images to the correct position"
+                  initialPictureList={phase3list}
+                  setPhaseScore={setPhase3Score}
+                />
+              }
+            />
+            <Route
+              path="/result"
+              element={<Results phase1score={phase1score} phase2score={phase2score} phase3score={phase3score} />}
+            />
           </Routes>
         </BrowserRouter>
       </div>
