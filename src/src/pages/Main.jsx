@@ -15,7 +15,7 @@ export default function Home({userData, setUserData}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(userData.email === "ruthvik@briobrill.com") {
+        if(userData.email === "meghaapk00@gmail.com") {
             // get all data from users collection and download it as a csv
             const usersCollection = collection(db, 'users');
             const querySnapshot = await getDocs(usersCollection);
